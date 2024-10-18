@@ -22,7 +22,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NewsApp11Theme {
-                NewsNavHost()
+                Scaffold{ paddingValues ->
+                    val topPadding = paddingValues.calculateTopPadding()
+                    NewsNavHost(modifier = Modifier
+//                        .padding(top =  topPadding)
+                    )
+                }
             }
         }
     }

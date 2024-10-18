@@ -3,7 +3,11 @@ package com.example.newsapp11.presentaion.navigatoin
 
 import android.util.Log
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -12,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -26,10 +31,12 @@ import com.example.newsapp11.presentaion.screen.BookmarkScreen
 import com.example.newsapp11.presentaion.screen.HomeScreen
 import com.example.newsapp11.presentaion.screen.SearchScreen
 import com.example.newsapp11.presentaion.screen.TestScreen
+import com.example.newsapp11.presentaion.screen.component.TopBarComp
 import com.example.newsapp11.presentaion.viewmodel.MainViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsNavHost() {
+fun NewsNavHost(modifier: Modifier = Modifier) {
 
     val bottomNavigationItems = remember {
         listOf(
@@ -64,8 +71,23 @@ fun NewsNavHost() {
                 backStackState?.destination?.route == Screen.TestScreen.route
     }
 
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(
+        state = rememberTopAppBarState()
+    )
+
 
     Scaffold(
+        modifier = modifier,
+//        topBar = {
+//            TopBarComp(
+//                modifier = Modifier,
+//                scrollBehavior = scrollBehavior,
+//                onSearchClicked = {
+//
+//                },
+//                onMoreVertClicked = {}
+//            )
+//        },
         bottomBar = {
             if (isBottomBarVisible) {
                 NewsBottomNavigation(
@@ -97,13 +119,12 @@ fun NewsNavHost() {
                 )
             }
         },
-
-        content = {
-            val bottomPadding = it.calculateBottomPadding()
+        content = { paddingValues ->
+//            val bottomPadding = paddingValues.calculateBottomPadding()
             NavHost(
                 navController = navController,
                 startDestination = Screen.HomeScreen.route,
-                modifier = Modifier.padding(bottom = bottomPadding)
+                modifier = Modifier.padding(paddingValues)
             ) {
                 composable(route = Screen.HomeScreen.route) {
                     val state by viewModel.homeState.collectAsState()
