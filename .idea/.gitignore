@@ -1,0 +1,4 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+app/src/main/java/com/example/newsapp11/data/remote/ApiRoutes.kt
